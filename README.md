@@ -1,6 +1,6 @@
 # Metroid
 
-A fully managed system for tracking and fetching metrics from AWS DynamoDB. 
+A fully managed system for tracking and fetching metrics (`Metroids`) from AWS DynamoDB. 
 
 ## Disclaimer
 
