@@ -2,6 +2,17 @@
 
 A fully managed system for tracking and fetching metrics from AWS DynamoDB. 
 
+## Disclaimer
+
+This is *VERY* rough code, as it is only version 0.0.1 and was ripped out of an existing project. As such the code is highly unstable, untested, and will be modified drastically in the coming days/weeks/months.
+
+On the plus side, the project I pulled this out of was using Metroid heavily and it performed admirably.
+
+## Installation
+```
+npm install metroid
+```
+
 ## Sample Usage
 
 ```node
