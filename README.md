@@ -4,7 +4,7 @@ A fully managed system for tracking and fetching metrics from AWS DynamoDB.
 
 ## Sample Usage
 
-```
+```node
 var metroidClient = require('metroid'),
     Metroid = metroidClient.Metroid;
     
