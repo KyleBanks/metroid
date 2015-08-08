@@ -227,6 +227,11 @@ module.exports = {
             });
             cb(null, output);
         });
-    }
+    },
+
+    /**
+     * The blueprint for a single Metroid object.
+     */
+    Metroid: Metroid
 
 };
