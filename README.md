@@ -16,12 +16,12 @@ npm install metroid
 ## Sample Usage
 
 ```node
-var metroidClient = require('metroid'),
+var metroid = require('metroid'),
     Metroid = metroidClient.Metroid;
     
 
 // Initialize the Metroid client.
-metroidClient.initialize(AWS_ACCESS_KEY, AWS_SECRET_KEY, 'MyMetroidTableName', READ_THROUGHPUT, WRITE_THROUGHPUT, function(err) {
+metroid.initialize(AWS_ACCESS_KEY, AWS_SECRET_KEY, 'MyMetroidTableName', READ_THROUGHPUT, WRITE_THROUGHPUT, function(err, metroidClient) {
     if (err) throw err;
     console.log("Metroid Client Initialized!");
     
@@ -46,6 +46,14 @@ metroidClient.retrieve(metroidType, startDate, endDate, function(err, metroids) 
     if (err) throw err;
     
     // Outputs all the Metroids retrieved
+    console.log(metroids);
+});
+
+// Retrieve most recent Metroids for a user.
+metroidClient.retrieveMostRecentForUser(user.id, LIMIT, function(err, metroids) {
+    if (err) throw err;
+    
+    // Outputs all Metroids retrieved for the user
     console.log(metroids);
 });
 
