@@ -2,6 +2,14 @@
 
 A fully managed system for tracking and fetching metrics (`Metroids`) from AWS DynamoDB. 
 
+## Quick Navigation
+- [Installation](#Installation)
+- [Sample Usage](#SampleUsage)
+- [DynamoDB Table](#DynamoDBTable)
+- [Batching](#Batching)
+- [Options](#Options)
+- [Tests](#Tests)
+
 ## Installation
 ```
 npm install metroid
@@ -35,7 +43,7 @@ metroidLib.initialize('MyMetroidTableName', opts, function(err, metroidClient) {
 // ... Later on ...
 
 // Retrieve all the Metroids of a specific type within a date range.
-metroidClient.retrieve(metroidType, startDate, endDate, function(err, metroids) {
+metroidClient.retrwieve(metroidType, startDate, endDate, function(err, metroids) {
     if (err) throw err;
     
     // Outputs all the Metroids retrieved
