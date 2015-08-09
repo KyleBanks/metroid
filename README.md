@@ -3,12 +3,12 @@
 A fully managed system for tracking and fetching metrics (`Metroids`) from AWS DynamoDB. 
 
 ## Quick Navigation
-- [Installation](#Installation)
-- [Sample Usage](#Sample-Usage)
-- [DynamoDB Table](#Dynamo-DBTable)
-- [Batching](#Batching)
-- [Options](#Options)
-- [Tests](#Tests)
+- [Installation](#installation)
+- [Sample Usage](#sample-usage)
+- [DynamoDB Table](#dynamodb-table)
+- [Batching](#batching)
+- [Options](#options)
+- [Tests](#tests)
 
 ## Installation
 ```
