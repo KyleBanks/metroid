@@ -60,7 +60,7 @@ If you want to see how the table will be created, see `MetroidTableDefinition` i
 
 ## Batching
 
-When you call `metroidClient.track(..)`, it's important to know that your Metroid is not written immediately to DynamoDB. Instead, the metroid is added to a batch will be written at a later time. See [Options.write](###write) for more details on how to configure the batch writing.
+When you call `metroidClient.track(..)`, it's important to know that your Metroid is not written immediately to DynamoDB. Instead, the metroid is added to a batch will be written at a later time. See [Options.write](#write) for more details on how to configure the batch writing.
 
 ## Options
 
