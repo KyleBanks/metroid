@@ -4,8 +4,8 @@ A fully managed system for tracking and fetching metrics (`Metroids`) from AWS D
 
 ## Quick Navigation
 - [Installation](#Installation)
-- [Sample Usage](#SampleUsage)
-- [DynamoDB Table](#DynamoDBTable)
+- [Sample Usage](#Sample-Usage)
+- [DynamoDB Table](#Dynamo-DBTable)
 - [Batching](#Batching)
 - [Options](#Options)
 - [Tests](#Tests)
