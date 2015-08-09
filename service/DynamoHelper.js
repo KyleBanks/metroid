@@ -32,7 +32,7 @@ function DynamoHelper(tableName, options) {
         apiVersion: '2012-08-10'
     });
 
-    this.createTableIfNotExists = _createTableIfNotExists;
+    this.createTableIfDoesntExist = _createTableIfDoesntExist;
 }
 
 /**
@@ -70,7 +70,7 @@ var MetroidTableDefinition = {
  * Creates a DynamoDB table if it doesn't exist.
  * @param cb {function(Error)}
  */
-function _createTableIfNotExists(cb) {
+function _createTableIfDoesntExist(cb) {
     var $this = this;
 
     $this.dynamoClient.describeTable({ TableName: $this.tableName }, function(err) {
@@ -116,7 +116,7 @@ DynamoHelper.prototype = {
     initialize: function(cb) {
         var $this = this;
 
-        $this.createTableIfNotExists(cb);
+        $this.createTableIfDoesntExist(cb);
     },
 
     /**
