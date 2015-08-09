@@ -58,11 +58,11 @@ module.exports = {
                 return cb(err);
             }
 
-            var tracker = new Tracker(tableName, dynamoHelper, options);
-            var retriever = new Retriever(tableName, dynamoHelper, options);
-
-            var client = new Interface(tracker, retriever);
-            cb(null, client);
+            cb(null, new Interface(
+                new Tracker(tableName, dynamoHelper, options),
+                new Retriever(tableName, dynamoHelper, options),
+                dynamoHelper
+            ));
         });
     },
 

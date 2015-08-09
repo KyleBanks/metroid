@@ -11,13 +11,22 @@
  *
  * @param tracker {Tracker}
  * @param retriever {Retriever}
+ * @param dynamoHelper {DynamoHelper}
  * @constructor
  */
-function Interface(tracker, retriever) {
+function Interface(tracker, retriever, dynamoHelper) {
     // Tracker
-    this.track = tracker.track;
+    this.track = tracker.track.bind(tracker);
 
     // Retriever
-    this.retrieve = retriever.retrieve;
-    this.retrieveMostRecentForUser = retriever.retrieveMostRecentForUser;
+    this.retrieve = retriever.retrieve.bind(retriever);
+    this.retrieveMostRecentForUser = retriever.retrieveMostRecentForUser.bind(retriever);
+
+    this.destroy = dynamoHelper.destroy.bind(dynamoHelper);
 }
+
+/**
+ * @public
+ * @type {Interface}
+ */
+module.exports = Interface;

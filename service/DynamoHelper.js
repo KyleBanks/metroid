@@ -32,7 +32,8 @@ function DynamoHelper(tableName, options) {
         apiVersion: '2012-08-10'
     });
 
-    this.createTableIfDoesntExist = _createTableIfDoesntExist;
+    this.createTableIfDoesntExist = _createTableIfDoesntExist.bind(this);
+    this.waitForTableToCreate = _waitForTableToCreate.bind(this);
 }
 
 /**
@@ -67,6 +68,31 @@ var MetroidTableDefinition = {
 };
 
 /**
+ * Polls DynamoDB for table creation status and executes the callback when the table has successfully created, or an error occurs.
+ * @param cb {function(Error)}
+ */
+function _waitForTableToCreate(cb) {
+    var $this = this;
+
+    console.log("Waiting while the Dynamo table is created...");
+    var wait = function() {
+        $this.dynamoClient.describeTable({ TableName: $this.tableName }, function(err, res) {
+            if (err) {
+                return cb(err);
+            }
+
+            if (res.Table.TableStatus == 'ACTIVE') {
+                cb(null);
+            } else {
+                console.log("Table status still %s", res.Table.TableStatus);
+                setTimeout(wait, 3000);
+            }
+        });
+    };
+    wait();
+}
+
+/**
  * Creates a DynamoDB table if it doesn't exist.
  * @param cb {function(Error)}
  */
@@ -95,11 +121,16 @@ function _createTableIfDoesntExist(cb) {
             tableDefinition.ProvisionedThroughput.ReadCapacityUnits = readThroughput;
             tableDefinition.ProvisionedThroughput.WriteCapacityUnits = writeThroughput;
 
-            $this.dynamoClient.createTable(tableDefinition, cb);
-            return;
+            $this.dynamoClient.createTable(tableDefinition, function(err) {
+                if (err) {
+                    return cb(err);
+                } else {
+                    $this.waitForTableToCreate(cb);
+                }
+            });
+        } else {
+            cb(err);
         }
-
-        cb(err);
     });
 }
 
@@ -130,6 +161,16 @@ DynamoHelper.prototype = {
         var $this = this;
 
         return $this.dynamoClient;
+    },
+
+    /**
+     * Destroys the Metroid table. WARNING: All Metroid will be lost!
+     * @param cb {function(Error)}
+     */
+    destroy: function(cb) {
+        var $this = this;
+
+        $this.dynamoClient.deleteTable({ TableName: $this.tableName }, cb);
     }
 
 };

@@ -27,8 +27,10 @@ function Tracker(tableName, dynamoHelper, options) {
         this.batchWriteMaxSize = options.write.batchSize ? options.write.batchSize : this.batchWriteMaxSize;
     }
 
-    this.writeMetroidBatch = _writeMetroidBatch;
-    this.writeMetroidBatchAfterDelay = _writeMetroidBatchAfterDelay;
+    this.writeMetroidBatch = _writeMetroidBatch.bind(this);
+    this.writeMetroidBatchAfterDelay = _writeMetroidBatchAfterDelay.bind(this);
+
+    this.writeMetroidBatch();
 }
 
 /**
@@ -46,12 +48,13 @@ function Tracker(tableName, dynamoHelper, options) {
 function _writeMetroidBatch() {
     var $this = this;
 
+    // Check if there's actually anything in the batch...
     if ($this.batch.length == 0) {
         $this.writeMetroidBatchAfterDelay($this.batchWriteInterval);
         return;
     }
 
-    // Determine which items to write
+    // Determine which items to write, and construct the Dynamo `PutRequest`.
     var itemsToWrite = [];
     $this.batch.forEach(function(metroid, index) {
         if (index < $this.batchWriteMaxSize) {
@@ -73,7 +76,7 @@ function _writeMetroidBatch() {
             console.error(err.stack);
             console.error($this.batch);
         } else {
-            console.log("%s Metroids tracked successfully.", params[$this.tableName].length);
+            console.log("%s Metroid(s) tracked successfully.", params[$this.tableName].length);
         }
 
         if ($this.batch.length > $this.batchWriteMaxSize) {

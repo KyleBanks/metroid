@@ -36,6 +36,16 @@ Metroid.prototype = {
     },
 
     /**
+     * Gets an attribute that was previously set using `Metroid.setAttribute`
+     *
+     * @param attributeName {String}
+     * @returns {Object} - A String or Number
+     */
+    getAttribute: function(attributeName) {
+        return this.attributes[attributeName];
+    },
+
+    /**
      * Returns a DynamoDB JSON representation of this Metric
      * @return {Object}
      */
@@ -80,6 +90,38 @@ Metroid.prototype = {
      */
     toString: function() {
         return JSON.stringify(this.toDynamoJSON());
+    },
+
+    /**
+     * Ensures this Metroid is exactly equal to another, including all attributes.
+     * @param other {Metroid}
+     * @returns {boolean}
+     */
+    equals: function(other) {
+        var $this = this;
+
+        if ($this.userId != other.userId) {
+            return false;
+        } else if ($this.type != other.type) {
+            return false;
+        } else if ($this.date.getTime() != other.date.getTime()) {
+            return false;
+        } else if (Object.keys($this.attributes).length != Object.keys(other.attributes).length) {
+            return false;
+        }
+
+        // Ensure the correct attributes were returned
+        for (var i = 0; i < Object.keys($this.attributes).length; i++) {
+            var attribute = Object.keys($this.attributes)[i];
+            var expected = $this.attributes[attribute];
+            var actual = other.getAttribute(attribute);
+
+            if (expected != actual) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 };
@@ -108,13 +150,12 @@ Metroid.fromDynamoJSON = function(dynamoJSON) {
         } else if (key === 'Type') {
             type = parseInt(value.N);
         } else {
-
+            // Custom attributes
             if (value.N) {
-                attributes[key] = parseInt(value.N);
+                attributes[key] = parseFloat(value.N);
             } else if (value.S) {
-                attributeKeys[key] = value.S;
+                attributes[key] = value.S;
             }
-
         }
     }
 
@@ -127,6 +168,6 @@ Metroid.fromDynamoJSON = function(dynamoJSON) {
 
 /**
  * @public
- * @type {Metric}
+ * @type {Metroid}
  */
 module.exports = Metroid;

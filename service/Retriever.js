@@ -121,7 +121,7 @@ Retriever.prototype = {
      * @param cb {function(Error, Array)}
      */
     retrieve: function(metroidType, startDate, endDate, cb) {
-        _retrieve(metroidType, startDate, endDate, cb);
+        _retrieve.call(this, metroidType, startDate, endDate, cb);
     },
 
     /**
