@@ -11,7 +11,7 @@ npm install metroid
 
 ```node
 var metroid = require('metroid'),
-    Metroid = metroidClient.Metroid;
+    Metroid = metroid.Metroid;
 
 // Initialize the Metroid client.
 var opts = {};
