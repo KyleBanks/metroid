@@ -1,5 +1,5 @@
 {
-  "name": "Metroid",
+  "name": "metroid",
   "version": "0.1.3",
   "description": "Analytics management and metric collection through DynamoDB.",
   "main": "index.js",

@@ -120,3 +120,15 @@ Example:
     batchSize: 50
 }
 ```
+
+## Tests
+
+In order to run the tests, ensure you've [globally configured the AWS SDK](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) or modify the [main test script](test/index.js) to include the Access/Secret keys in the `MinimalOptions` object.
+
+Once you have a configured SDK, you can simply run the tests with the following command:
+
+```
+npm test
+```
+
+It's worth noting that by default this will provision a DynamoDB table with 1 read and 1 write throughput, and immediately delete the table when the tests finish executing. 
