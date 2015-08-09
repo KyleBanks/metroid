@@ -34,7 +34,7 @@ metroid.initialize('MyMetroidTableName', opts, function(err, metroidClient) {
 
 // ... Later on ...
 
-// Retrieve all the Metroids of the specified type within a date range.
+// Retrieve all the Metroids of a specific type within a date range.
 metroidClient.retrieve(metroidType, startDate, endDate, function(err, metroids) {
     if (err) throw err;
     
