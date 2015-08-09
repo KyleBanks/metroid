@@ -15,24 +15,18 @@ var AWS = require('aws-sdk');
 /**
  * Constructs a DynamoHelper.
  *
- * @param awsAccessKey {String}
- * @param awsSecretKey {String}
  * @param tableName {String}
- * @param readThroughput {Number}
- * @param writeThroughput {Number}
+ * @param options {Object}
+ *
  * @constructor
  */
-function DynamoHelper(awsAccessKey, awsSecretKey, tableName, readThroughput, writeThroughput) {
-    this.awsAccessKey = awsAccessKey;
-    this.awsSecretKey = awsSecretKey;
+function DynamoHelper(tableName, options) {
     this.tableName = tableName;
-    this.readThroughput = readThroughput;
-    this.writeThroughput = writeThroughput;
+    this.options = options;
 
-    AWS.config.update({
-        accessKeyId: this.awsAccessKey,
-        secretAccessKey: this.awsSecretKey
-    });
+    if (options.aws) {
+        AWS.config.update(options.aws);
+    }
 
     this.dynamoClient = new AWS.DynamoDB({
         apiVersion: '2012-08-10'
@@ -86,8 +80,20 @@ function _createTableIfNotExists(cb) {
 
             var tableDefinition = MetroidTableDefinition;
             tableDefinition.TableName = $this.tableName;
-            tableDefinition.ProvisionedThroughput.ReadCapacityUnits = $this.readThroughput;
-            tableDefinition.ProvisionedThroughput.WriteCapacityUnits = $this.writeThroughput;
+
+            var readThroughput = 1;
+            var writeThroughput = 1;
+            if ($this.options.dynamo) {
+                var dynamoOpts = $this.options.dynamo;
+                if (dynamoOpts.readThroughput) {
+                    readThroughput = dynamoOpts.readThroughput;
+                }
+                if (dynamoOpts.writeThroughput) {
+                    writeThroughput = dynamoOpts.writeThrouput;
+                }
+            }
+            tableDefinition.ProvisionedThroughput.ReadCapacityUnits = readThroughput;
+            tableDefinition.ProvisionedThroughput.WriteCapacityUnits = writeThroughput;
 
             $this.dynamoClient.createTable(tableDefinition, cb);
             return;
@@ -108,7 +114,9 @@ DynamoHelper.prototype = {
      * @param cb {function(Error)}
      */
     initialize: function(cb) {
-        _createTableIfNotExists(cb);
+        var $this = this;
+
+        $this.createTableIfNotExists(cb);
     },
 
     /**

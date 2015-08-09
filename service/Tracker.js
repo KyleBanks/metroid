@@ -10,14 +10,22 @@
  * Constructs a Tracker.
  * @param tableName {String}
  * @param dynamoHelper {DynamoHelper}
+ * @param options {Object}
  * @constructor
  */
-function Tracker(tableName, dynamoHelper) {
+function Tracker(tableName, dynamoHelper, options) {
     this.tableName = tableName;
     this.dynamoHelper = dynamoHelper;
+    this.options = options;
 
     this.batch = [];
+
     this.batchWriteInterval = 1000;
+    this.batchWriteMaxSize = 25;
+    if (options.write) {
+        this.batchWriteInterval = options.write.batchInterval ? options.write.batchInterval : this.batchWriteInterval;
+        this.batchWriteMaxSize = options.write.batchSize ? options.write.batchSize : this.batchWriteMaxSize;
+    }
 
     this.writeMetroidBatch = _writeMetroidBatch;
     this.writeMetroidBatchAfterDelay = _writeMetroidBatchAfterDelay;
@@ -42,12 +50,11 @@ function _writeMetroidBatch() {
         $this.writeMetroidBatchAfterDelay($this.batchWriteInterval);
         return;
     }
-    var MAX_BATCH_SIZE = 25;
 
     // Determine which items to write
     var itemsToWrite = [];
     $this.batch.forEach(function(metroid, index) {
-        if (index < MAX_BATCH_SIZE) {
+        if (index < $this.batchWriteMaxSize) {
             itemsToWrite.push({
                 PutRequest: {
                     Item: metroid.toDynamoJSON()
@@ -69,8 +76,8 @@ function _writeMetroidBatch() {
             console.log("%s Metroids tracked successfully.", params[$this.tableName].length);
         }
 
-        if ($this.batch.length > MAX_BATCH_SIZE) {
-            $this.batch = $this.batch.splice(MAX_BATCH_SIZE, $this.batch.length);
+        if ($this.batch.length > $this.batchWriteMaxSize) {
+            $this.batch = $this.batch.splice($this.batchWriteMaxSize, $this.batch.length);
             $this.writeMetroidBatch();
         } else {
             $this.batch = [];

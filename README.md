@@ -2,12 +2,6 @@
 
 A fully managed system for tracking and fetching metrics (`Metroids`) from AWS DynamoDB. 
 
-## Disclaimer
-
-This is *VERY* rough code, as it is only version 0.0.1 and was ripped out of an existing project. As such the code is highly unstable, untested, and will be modified drastically in the coming days/weeks/months.
-
-On the plus side, the project I pulled this out of was using Metroid heavily and it performed admirably.
-
 ## Installation
 ```
 npm install metroid
@@ -18,10 +12,10 @@ npm install metroid
 ```node
 var metroid = require('metroid'),
     Metroid = metroidClient.Metroid;
-    
 
 // Initialize the Metroid client.
-metroid.initialize(AWS_ACCESS_KEY, AWS_SECRET_KEY, 'MyMetroidTableName', READ_THROUGHPUT, WRITE_THROUGHPUT, function(err, metroidClient) {
+var opts = {};
+metroid.initialize('MyMetroidTableName', opts, function(err, metroidClient) {
     if (err) throw err;
     console.log("Metroid Client Initialized!");
     
@@ -37,7 +31,6 @@ metroid.initialize(AWS_ACCESS_KEY, AWS_SECRET_KEY, 'MyMetroidTableName', READ_TH
     // Track the Metroid
     metroidClient.track(metroid);
 });
-
 
 // ... Later on ...
 
@@ -57,4 +50,73 @@ metroidClient.retrieveMostRecentForUser(user.id, LIMIT, function(err, metroids) 
     console.log(metroids);
 });
 
+```
+
+## DynamoDB Table
+
+If the table name provided doesn't exist, it will be created automatically with the correct attributes and keys. It is recommended you allow the module to create the table itself rather than trying to create it yourself. 
+
+If you want to see how the table will be created, see `MetroidTableDefinition` in [DynamoHelper.js](service/DynamoHelper.js).
+
+## Batching
+
+When you call `metroidClient.track(..)`, it's important to know that your Metroid is not written immediately to DynamoDB. Instead, the metroid is added to a batch will be written at a later time. See [Options.write](###write) for more details on how to configure the batch writing.
+
+## Options
+
+There are a number of options that can be provided on initialization to fully customize the Metroid module:
+
+```node
+var options = {
+    aws: {...},
+    dynamo: {...},
+    write: {...}
+}
+```
+
+### aws
+
+The `aws` configuration object provides a direct way to configure the AWS SDK. If set, this object will be provided directly to `AWS.config.update(..)`. You can use this to directly provide your Access/Secret key, set the Region, etc.
+
+By default, `aws` is null and `AWS.config.update` will not be called.
+
+Example:
+```
+{
+    accessKeyId: "abcd1234"
+    secretAccessKey: "1234abcd",
+    region: "us-east-1"
+}
+```
+
+### dynamo
+
+The `dynamo` configuration object is used for options when creating the Dynamo table. 
+
+Properties:
+- readThroughput *Number* [**Default: 1**]: The read throughput to provision the table with. See [Provisioned Throughput in Amazon DynamoDB](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html).
+- writeThroughput *Number* [**Default: 1**]: The write throughput to provision the table with. See [Provisioned Throughput in Amazon DynamoDB](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html).
+
+Example:
+```
+{
+    readThroughput: 25
+    writeThroughput: 100
+}
+```
+
+### write
+
+The `write` configuration object is used to configure how Metroids are written to Dynamo.
+
+Properties:
+- batchInterval *Number* [**Default: 1000**]: In milliseconds, how often Metroid batches should be written to Dynamo
+- batchSize *Number* [**Default: 25**]: Maximum number of Metroids to write per batch. If exceeded, the remaining Metroids will be written immediately in a new batch.
+
+Example:
+```
+{
+    batchInterval: 5000
+    batchSize: 50
+}
 ```

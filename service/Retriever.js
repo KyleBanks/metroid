@@ -15,12 +15,13 @@ var Metroid = require('../model/Metroid');
  * Constructs a Retriever.
  * @param tableName {String}
  * @param dynamoHelper {DynamoHelper}
+ * @param options {Object}
  * @constructor
  */
-function Retriever(tableName, dynamoHelper) {
+function Retriever(tableName, dynamoHelper, options) {
     this.tableName = tableName;
     this.dynamoHelper = dynamoHelper;
-
+    this.options = options;
 }
 
 /**
