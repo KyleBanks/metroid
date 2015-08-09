@@ -10,12 +10,12 @@ npm install metroid
 ## Sample Usage
 
 ```node
-var metroid = require('metroid'),
-    Metroid = metroid.Metroid;
+var metroidLib = require('metroid'),
+    Metroid = metroidLib.Metroid;
 
 // Initialize the Metroid client.
 var opts = {};
-metroid.initialize('MyMetroidTableName', opts, function(err, metroidClient) {
+metroidLib.initialize('MyMetroidTableName', opts, function(err, metroidClient) {
     if (err) throw err;
     console.log("Metroid Client Initialized!");
     
