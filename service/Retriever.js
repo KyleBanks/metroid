@@ -48,7 +48,7 @@ function _retrieve(metroidType, startDate, endDate, lastEvaluatedKey, loadedMetr
     }
 
     if (startDate.getTime() > endDate.getTime()) {
-        return cb(new Error("The start date provided must be LESS than the end date."), null);
+        return cb(new Error("The start date provided must be LESS than the end date. [StartDate: " + startDate + ", EndDate: " + endDate + "]"), null);
     }
 
     var metroids = loadedMetroids || [];
