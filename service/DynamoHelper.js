@@ -115,7 +115,7 @@ function _createTableIfDoesntExist(cb) {
                     readThroughput = dynamoOpts.readThroughput;
                 }
                 if (dynamoOpts.writeThroughput) {
-                    writeThroughput = dynamoOpts.writeThrouput;
+                    writeThroughput = dynamoOpts.writeThroughput;
                 }
             }
             tableDefinition.ProvisionedThroughput.ReadCapacityUnits = readThroughput;
