@@ -96,7 +96,7 @@ function _retrieve(metroidType, startDate, endDate, lastEvaluatedKey, loadedMetr
 
         // Check if there is more data to load, otherwise return a final response
         if (data.LastEvaluatedKey) {
-            _retrieve(metroidType, startDate, endDate, data.LastEvaluatedKey, metroids, cb);
+            _retrieve.call($this, metroidType, startDate, endDate, data.LastEvaluatedKey, metroids, cb);
         } else {
             var output = [];
             metroids.forEach(function(metroid) {
