@@ -1,6 +1,6 @@
 {
   "name": "metroid",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Analytics management and metric collection through DynamoDB.",
   "main": "index.js",
   "scripts": {

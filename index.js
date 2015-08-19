@@ -9,7 +9,7 @@
 /**
  * @imports
  */
-var Metroid = require('./model/metroid');
+var Metroid = require('./model/Metroid');
 
 var DynamoHelper = require('./service/DynamoHelper'),
     Tracker = require('./service/Tracker'),
