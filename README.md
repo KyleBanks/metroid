@@ -1,4 +1,5 @@
 # Metroid
+[![npm version](https://badge.fury.io/js/metroid.svg)](http://badge.fury.io/js/metroid)
 
 A fully managed system for tracking and fetching metrics (`Metroids`) from AWS DynamoDB. 
 
